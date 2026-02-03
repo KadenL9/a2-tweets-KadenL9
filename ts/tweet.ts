@@ -38,21 +38,62 @@ class Tweet {
         
         return written_text.trim();
     }
-    
+
     get activityType():string {
         if (this.source != 'completed_event') {
             return "unknown";
         }
-        //TODO: parse the activity type from the text of the tweet
-        return "";
+        
+        let parsed_string = this.text;
+
+        if (parsed_string.includes(" - ")) {
+            parsed_string = parsed_string.split(" - ")[0].trim();
+        }
+        else {
+            parsed_string = parsed_string.split("with @Runkeeper")[0].trim();
+        }
+
+        if (parsed_string.includes(" km ")) {
+            parsed_string = parsed_string.split(" km ")[1].trim();
+        }
+        else if (parsed_string.includes(" mi ")) {
+            parsed_string = parsed_string.split(" mi ")[1].trim();
+        }
+        else {
+            parsed_string = parsed_string.split(" ").at(-1)?.trim() || "unknown";
+        }
+
+        return parsed_string;
     }
 
     get distance():number {
         if(this.source != 'completed_event') {
             return 0;
         }
-        //TODO: prase the distance from the text of the tweet
-        return 0;
+        
+        let parsed_string = this.text;
+        let isMiles = true;
+
+        if (parsed_string.includes(" km ")) {
+            isMiles = false;
+            parsed_string = parsed_string.split(" km ")[0].trim();
+        }
+        else if (parsed_string.includes(" mi ")) {
+            parsed_string = parsed_string.split(" mi ")[0].trim();
+        }
+        else {
+            return 0;
+        }
+        
+        parsed_string = parsed_string.split(" ").at(-1) || "0";
+        parsed_string.trim();
+
+        let dist: number = Number(parsed_string);
+        if (! isMiles) {
+            dist = dist / 1.609;
+        }
+
+        return dist;
     }
 
     getHTMLTableRow(rowNumber:number):string {
