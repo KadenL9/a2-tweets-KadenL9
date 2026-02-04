@@ -45,25 +45,19 @@ class Tweet {
         }
         
         let parsed_string = this.text;
-
-        if (parsed_string.includes(" - ")) {
-            parsed_string = parsed_string.split(" - ")[0].trim();
-        }
-        else {
-            parsed_string = parsed_string.split("with @Runkeeper")[0].trim();
-        }
-
+        let activity: string = "";
+       
         if (parsed_string.includes(" km ")) {
-            parsed_string = parsed_string.split(" km ")[1].trim();
+            activity = parsed_string.split(" km ")[1];
         }
         else if (parsed_string.includes(" mi ")) {
-            parsed_string = parsed_string.split(" mi ")[1].trim();
+            activity = parsed_string.split(" mi ")[1];
         }
         else {
-            parsed_string = parsed_string.split(" ").at(-1)?.trim() || "unknown";
+            return "unknown";
         }
-
-        return parsed_string;
+        
+        return activity.trim().split(" ")[0];
     }
 
     get distance():number {
