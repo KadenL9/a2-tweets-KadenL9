@@ -155,7 +155,7 @@ function renderGraph(tweet_array, activityArray, isAggregated) {
 				"field": "distance",
 				"aggregate": isAggregated ? "average" : undefined,
 				"type": "quantitative",
-				"axis": {"title": "Average Distance (mi)"}
+				"axis": isAggregated ? {"title": "Average Distance (mi)"} : {"title": "Distance (mi)"}
 			},
 			"color": {
 				"field": "activityType",
